@@ -1,0 +1,12 @@
+#!/bin/bash
+# Installer calls this as root; also reused by the installation helper.
+set -euo pipefail
+for path in /Library /Library/Printers /Library/Printers/QL1100Native /Library/Printers/PPDs /Library/Printers/PPDs/Contents /Library/Printers/PPDs/Contents/Resources /Library/Printers/QL1100Native/rastertoql1100 /Library/Printers/PPDs/Contents/Resources/Brother-QL1100-Native.ppd.gz; do
+  if [ -L "$path" ]; then echo "Refusing symlink destination: $path" >&2; exit 1; fi
+done
+for path in /Library/Printers/QL1100Native /Library/Printers/PPDs/Contents/Resources/Brother-QL1100-Native.ppd.gz; do
+  if [ -e "$path" ]; then
+    echo "Refusing existing destination: $path. Remove the previous native driver before reinstalling." >&2
+    exit 1
+  fi
+done
